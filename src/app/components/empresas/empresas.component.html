@@ -1,0 +1,174 @@
+<div class="tituloPagina">
+  {{ Titulo }} <small>{{ TituloAccionABMC[AccionABMC] }}</small>
+</div>
+<!--Form de menu-->
+<form *ngIf="AccionABMC == 'L'">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <button type="button" class="btn btn-primary" (click)="Buscar()">
+        <i class="fas fa-search"> </i> Buscar
+      </button>
+      <button type="button" class="btn btn-primary" (click)="Agregar()">
+        <i class="fas fa-plus"> </i>
+        Agregar
+      </button>
+    </div>
+  </div>
+</form>
+
+<!--Tabla de busqueda-->
+<table
+  class="table table-hover table-sm table-bordered table-striped"
+  *ngIf="Empresas.length && AccionABMC == 'L'"
+>
+  <thead>
+    <th class="text-center">Id Empresa</th>
+    <th class="text-center">Razon Social</th>
+    <th class="text-center">Cantidad Empleados</th>
+    <th class="text-center">Fecha Fundación</th>
+    <th class="text-center">Acciones</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let empresa of Empresas">
+      <td>{{ empresa.IdEmpresa }}</td>
+      <td>{{ empresa.RazonSocial }}</td>
+      <td>{{ empresa.CantidadEmpleados }}</td>
+      <td>{{ empresa.FechaFundacion | date }}</td>
+      <td>
+        <button
+          class="btn btn-sm btn-outline-primary"
+          (click)="Consultar(empresa)"
+          title="Consultar"
+        >
+          <i class="fas fa-eye"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <h6>Registros: {{ Empresas.length }}</h6>
+</table>
+
+<!--Formulario para agregar empresas-->
+<form
+  name="FormEmpresa"
+  [formGroup]="FormEmpresa"
+  *ngIf="AccionABMC == 'A' || AccionABMC == 'C'"
+>
+  <div class="container-fluid">
+    <fieldset [disabled]="AccionABMC == 'C'">
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <label class="col-form-label">Razon social</label>
+        </div>
+        <div class="col-sm-12 col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="RazonSocial"
+            [ngClass]="{
+              'is-invalid':
+                (FormEmpresa.controls.RazonSocial.touched || submitted) &&
+                FormEmpresa.controls.RazonSocial.errors
+            }"
+          />
+          <div
+            class="validacion"
+            *ngIf="
+              (FormEmpresa.controls.RazonSocial.touched || submitted) &&
+              FormEmpresa.controls.RazonSocial.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="
+              (FormEmpresa.controls.RazonSocial.touched || submitted) &&
+              FormEmpresa.controls.RazonSocial.errors?.maxlength
+            "
+          >
+            Dato texto, maximo 50 caracteres.
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <label class="col-form-label">Cantidad de Empleados</label>
+        </div>
+        <div class="col-sm-12 col-md-8">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="CantidadEmpleados"
+            [ngClass]="{
+              'is-invalid':
+                (FormEmpresa.controls.CantidadEmpleados.touched || submitted) &&
+                FormEmpresa.controls.CantidadEmpleados.errors
+            }"
+          />
+          <div
+            class="validacion"
+            *ngIf="
+              (FormEmpresa.controls.CantidadEmpleados.touched || submitted) &&
+              FormEmpresa.controls.CantidadEmpleados.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-4">
+          <label class="col-form-label">Fecha de fundación</label>
+        </div>
+        <div class="col-sm-12 col-md-8">
+          <input
+            type="text"
+            class="form-control"
+            formControlName="FechaFundacion"
+            [ngClass]="{
+              'is-invalid':
+                (FormEmpresa.controls.FechaFundacion.touched || submitted) &&
+                FormEmpresa.controls.FechaFundacion.errors
+            }"
+          />
+          <div
+            class="validacion"
+            *ngIf="
+              (FormEmpresa.controls.FechaFundacion.touched || submitted) &&
+              FormEmpresa.controls.FechaFundacion.errors?.required
+            "
+          >
+            Dato requerido.
+          </div>
+          <div
+            class="validacion"
+            *ngIf="
+              (FormEmpresa.controls.FechaFundacion.touched || submitted) &&
+              FormEmpresa.controls.FechaFundacion.errors?.pattern
+            "
+          >
+            Dato fecha, formato dd/mm/aaaa.
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <hr />
+    <div class="row justify-content-center">
+      <button
+        type="button"
+        class="btn btn-warning"
+        (click)="Guardar()"
+        *ngIf="AccionABMC == 'A'"
+      >
+        <i class="fas fa-check"></i>
+        Grabar
+      </button>
+      <button type="button" class="btn btn-warning" (click)="Volver()">
+        <i class="fas fa-undo"></i>
+
+        {{ AccionABMC == 'A' ? 'Cancelar' : 'Volver' }}
+      </button>
+    </div>
+  </div>
+</form>
